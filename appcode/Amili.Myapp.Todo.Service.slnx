@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Amili.Myapp.Todo.Service.API/Amili.Myapp.Todo.Service.API.csproj" Id="f24e520b-0e2b-44f3-93f7-f7198f58f25e" />
+  <Project Path="Amili.Myapp.Todo.Service.Core/Amili.Myapp.Todo.Service.Core.csproj" Id="caa34034-ad13-4415-9cd5-0417da822dfd" />
+  <Project Path="Amili.Myapp.Todo.Service.Implementation/Amili.Myapp.Todo.Service.Implementation.csproj" Id="235f011c-32ed-4882-9b2c-8bb89d9c4406" />
+  <Project Path="Amili.Myapp.Todo.Service.Test/Amili.Myapp.Todo.Service.Test.csproj" Id="2a3083b6-4fa2-45ff-a366-76482725b0b7" />
+</Solution>
