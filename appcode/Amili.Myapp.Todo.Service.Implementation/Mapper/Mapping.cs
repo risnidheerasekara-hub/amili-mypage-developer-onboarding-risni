@@ -16,6 +16,6 @@ public class MapperProfile : Profile
     {
         // CreateMap<TSource, TDestination>() 
         CreateMap<DataModels.Todo, TodoResponse>();
-        CreateMap<CreateTodo, DataModels.Todo>();
+        CreateMap<CreateTodoRequest, DataModels.Todo>();
     }
 }
