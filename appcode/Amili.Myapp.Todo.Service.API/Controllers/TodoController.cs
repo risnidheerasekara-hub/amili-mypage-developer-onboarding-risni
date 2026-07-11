@@ -14,7 +14,7 @@ public class TodoItemsController(ITodoService todoService) : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(TodoResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult> CreateTodoItem([FromBody] CreateTodo request)
+    public async Task<IActionResult> CreateTodoItem([FromBody] CreateTodoRequest request)
     {
         var response = await todoService.CreateTodoAsync(request);
         return CreatedAtAction(nameof(GetTodoItemById), new { id = response.Id }, response);
@@ -23,7 +23,7 @@ public class TodoItemsController(ITodoService todoService) : ControllerBase
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(TodoResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult> GetTodoItemById(long id)
+    public async Task<IActionResult> GetTodoItemById(long id)
     {
         var response = await todoService.GetTodoByIdAsync(id);
         if (response == null)
@@ -35,7 +35,7 @@ public class TodoItemsController(ITodoService todoService) : ControllerBase
 
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<TodoResponse>), StatusCodes.Status200OK)]
-    public async Task<ActionResult> GetAllTodoItems()
+    public async Task<IActionResult> GetAllTodoItems()
     {
         var response = await todoService.GetAllTodosAsync();
 
@@ -45,7 +45,7 @@ public class TodoItemsController(ITodoService todoService) : ControllerBase
     [HttpPut("{id}")]
     [ProducesResponseType(typeof(TodoResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult> UpdateTodoItem(long id, [FromBody] UpdateTodo request)
+    public async Task<IActionResult> UpdateTodoItem(long id, [FromBody] UpdateTodoRequest request)
     {
         var response = await todoService.UpdateTodoAsync(id, request);
         if (response == null)
@@ -56,13 +56,30 @@ public class TodoItemsController(ITodoService todoService) : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<string?> DeleteTodoItem(long id)
+    public async Task<IActionResult> DeleteTodoItem(long id)
     {
 
-        var deleteResponse = await todoService.DeleteTodoAsync(id);
-        return deleteResponse;
+        var deleted = await todoService.DeleteTodoAsync(id);
+        if (!deleted)
+        {
+            return NotFound();
+        }
+        return NoContent();
+    }
+
+    [HttpPatch("{id}")]
+    [ProducesResponseType(typeof(TodoResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateTodoItemComplete(long id, [FromBody] bool isCompleted)
+    {
+        var response = await todoService.UpdateTodoCompleteAsync(id, isCompleted);
+        if (response == null)
+        {
+            return NotFound();
+        }
+        return Ok(response);
     }
 
 }
