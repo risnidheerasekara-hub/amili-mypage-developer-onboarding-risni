@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Amili.Myapp.Todo.Service.Implementation.Migrations
 {
     [DbContext(typeof(TodoDbContext))]
-    [Migration("20260710034948_InitialCreate")]
+    [Migration("20260711011437_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -34,10 +34,10 @@ namespace Amili.Myapp.Todo.Service.Implementation.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime?>("CompletedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamptz");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamptz");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
@@ -47,11 +47,12 @@ namespace Amili.Myapp.Todo.Service.Implementation.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("TodoItems");
+                    b.ToTable("Todo");
                 });
 #pragma warning restore 612, 618
         }
