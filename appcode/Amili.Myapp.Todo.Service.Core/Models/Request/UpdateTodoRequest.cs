@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Amili.Myapp.Todo.Service.Core.Models.Request;
+﻿namespace Amili.Myapp.Todo.Service.Core.Models.Request;
 
 public class UpdateTodoRequest
 {
