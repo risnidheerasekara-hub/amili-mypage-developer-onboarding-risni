@@ -12,7 +12,7 @@ public class Todo
 
     [Column(TypeName = "varchar(255)")]
     [StringLength(255)]
-    public string Name { get; set; } = string.Empty;
+    public string Name { get; set; } = default!;
 
     [Column(TypeName = "text")]
     public string? Description { get; set; }
