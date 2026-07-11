@@ -12,7 +12,6 @@ public class TodoService(TodoDbContext dbcontext, IMapper mapper) : ITodoService
     public async Task<TodoResponse> CreateTodoAsync(CreateTodoRequest request)
     {
         var todoItem = mapper.Map<DataModels.Todo>(request);
-        todoItem.CreatedAt = DateTime.UtcNow;
 
         dbcontext.Todos.Add(todoItem);
         await dbcontext.SaveChangesAsync();
