@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="16.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.9">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
@@ -16,7 +15,6 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\Amili.Myapp.Todo.Service.Core\Amili.Myapp.Todo.Service.Core.csproj" />
     <ProjectReference Include="..\Amili.Myapp.Todo.Service.Implementation\Amili.Myapp.Todo.Service.Implementation.csproj" />
   </ItemGroup>
 
