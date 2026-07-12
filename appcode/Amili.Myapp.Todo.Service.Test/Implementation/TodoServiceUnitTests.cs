@@ -71,7 +71,67 @@ public class TodoServiceUnitTests
         Assert.Null(result);
     }
 
-   
+    [Fact(DisplayName = "update todo item with existing id")]
+    public async Task Should_UpdateAndReturnTodo_When_UpdateTodoAsync_IsInvokedWithExistingIdAndValidRequest()
+    {
+        var todo = new Datamodels.Todo
+        {
+            Name = "Test Todo",
+            Description = "Test Description",
+            CreatedAt = DateTime.UtcNow,
+            IsCompleted = false,
+            CompletedAt = null
+        };
+        _dbContext.Add(todo);
+        await _dbContext.SaveChangesAsync();
+        var updateRequest = new UpdateTodoRequest
+        {
+            Name = "Updated Todo",
+            Description = "Updated Description"
+        };
+        var result = await _todoService.UpdateTodoAsync(todo.Id, updateRequest);
+        Assert.NotNull(result);
+        Assert.Equal(todo.Id, result.Id);
+        Assert.Equal(updateRequest.Name, result.Name);
+        Assert.Equal(updateRequest.Description, result.Description);
+    }
+
+    [Fact(DisplayName = "update todo item with non existing id")]
+    public async Task Should_ReturnNull_When_UpdateTodoAsync_IsInvokedWithNonExistingId()
+    {
+        var updateRequest = new UpdateTodoRequest
+        {
+            Name = "Updated Todo",
+            Description = "Updated Description"
+        };
+        var result = await _todoService.UpdateTodoAsync(999, updateRequest);
+        Assert.Null(result);
+    }
+
+    [Fact(DisplayName = "update todo item with null description")]
+    public async Task Should_KeepExistingDescription_When_UpdateTodoAsync_IsInvokedWithNullDescription()
+    {
+        var todo = new Datamodels.Todo
+        {
+            Name = "Test Todo",
+            Description = "Test Description",
+            CreatedAt = DateTime.UtcNow,
+            IsCompleted = false,
+            CompletedAt = null
+        };
+        _dbContext.Add(todo);
+        await _dbContext.SaveChangesAsync();
+        var updateRequest = new UpdateTodoRequest
+        {
+            Name = "Updated Todo",
+            Description = null
+        };
+        var result = await _todoService.UpdateTodoAsync(todo.Id, updateRequest);
+        Assert.NotNull(result);
+        Assert.Equal(todo.Id, result.Id);
+        Assert.Equal(updateRequest.Name, result.Name);
+        Assert.Equal(todo.Description, result.Description);
+    }
 
 
 }
