@@ -5,6 +5,7 @@ using Amili.Myapp.Todo.Service.Test.InMemoryDb;
 using AutoMapper;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json.Linq;
 using Datamodels = Amili.Myapp.Todo.Service.Core.DataModels;
 
 namespace Amili.Myapp.Todo.Service.Test.Implementation;
@@ -133,5 +134,30 @@ public class TodoServiceUnitTests
         Assert.Equal(todo.Description, result.Description);
     }
 
+    [Fact(DisplayName = "delete todo item with existing id")]
+    public async Task Should_ReturnTrueAndRemoveTodo_When_DeleteTodoAsync_IsInvokedWithExistingId()
+    {
+        var todo = new Datamodels.Todo
+        {
+            Name = "Test Todo",
+            Description = "Test Description",
+            CreatedAt = DateTime.UtcNow,
+            IsCompleted = false,
+            CompletedAt = null
+        };
+        _dbContext.Add(todo);
+        await _dbContext.SaveChangesAsync();
+        var result = await _todoService.DeleteTodoAsync(todo.Id);
+        Assert.True(result);
+    }
+
+    [Fact(DisplayName = "delete todo item with non existing id")]
+    public async Task Should_ReturnFalse_When_DeleteTodoAsync_IsInvokedWithNonExistingId()
+    {
+        var result = await _todoService.DeleteTodoAsync(999);
+        Assert.False(result);
+    }
+
+    
 
 }
