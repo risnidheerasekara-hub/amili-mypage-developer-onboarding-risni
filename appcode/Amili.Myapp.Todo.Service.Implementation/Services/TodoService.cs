@@ -19,7 +19,7 @@ public class TodoService(TodoDbContext dbcontext, IMapper mapper) : ITodoService
         return mapper.Map<TodoResponse>(todoItem);
     }
 
-    public async Task<TodoResponse> GetTodoByIdAsync(long id)
+    public async Task<TodoResponse?> GetTodoByIdAsync(long id)
     {
         var todoItem = await dbcontext.Todos.FindAsync(id);
         if (todoItem == null)
