@@ -64,7 +64,14 @@ public class TodoServiceUnitTests
         Assert.Equal(todo.IsCompleted, result.IsCompleted);
         Assert.Equal(todo.CompletedAt, result.CompletedAt);
     }
+    [Fact(DisplayName = "todo item with non existing id")]
+    public async Task Should_ReturnNull_When_TodoDoesNotExist()
+    {
+        var result = await _todoService.GetTodoByIdAsync(999);
+        Assert.Null(result);
+    }
 
+   
 
 
 }
