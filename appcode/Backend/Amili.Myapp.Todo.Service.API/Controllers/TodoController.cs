@@ -69,12 +69,12 @@ public class TodoItemsController(ITodoService todoService) : ControllerBase
         return NoContent();
     }
 
-    [HttpPatch("{id}")]
+    [HttpPatch("{id}/complete")]
     [ProducesResponseType(typeof(TodoResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdateTodoItemComplete(long id, [FromBody] bool isCompleted)
+    public async Task<IActionResult> UpdateTodoItemComplete(long id)
     {
-        var response = await todoService.UpdateTodoCompleteAsync(id, isCompleted);
+        var response = await todoService.CompleteTodoAsync(id);
         if (response == null)
         {
             return NotFound();
