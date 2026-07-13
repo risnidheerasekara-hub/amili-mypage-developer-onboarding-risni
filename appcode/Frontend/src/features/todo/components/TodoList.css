@@ -1,0 +1,142 @@
+.todo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.todo-list__header h2 {
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.toolbar input {
+  flex: 1;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  font-size: 0.95rem;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.toolbar input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(47, 111, 237, 0.15);
+}
+
+.toolbar .btn-add {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: var(--color-primary);
+  color: white;
+  font-size: 1.4rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+  transition: background 0.15s, transform 0.1s;
+  flex-shrink: 0;
+}
+
+.toolbar .btn-add:hover {
+  background: var(--color-primary-hover);
+}
+
+.toolbar .btn-add:active {
+  transform: scale(0.96);
+}
+
+.todo-list__card {
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.todo-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.todo-table thead th {
+  text-align: left;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  padding: 0.9rem 1.25rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.todo-table tbody tr {
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.todo-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.todo-table tbody tr:not(:last-child) td {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.todo-table td {
+  padding: 0.9rem 1.25rem;
+  font-size: 0.92rem;
+  vertical-align: middle;
+}
+
+.todo-table td.todo-name {
+  font-weight: 500;
+}
+
+.todo-table td.todo-description {
+  color: var(--color-text-muted);
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.status-toggle {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid var(--color-border);
+  background: transparent;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.status-toggle.is-complete {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+}
+
+.status-toggle svg {
+  width: 14px;
+  height: 14px;
+}
+
+.empty-state,
+.loading-state {
+  padding: 3rem 1.5rem;
+  text-align: center;
+  color: var(--color-text-muted);
+}
