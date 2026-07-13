@@ -10,5 +10,5 @@ public interface ITodoService
     Task<TodoResponse[]> GetAllTodosAsync();
     Task<TodoResponse?> UpdateTodoAsync(long id, UpdateTodoRequest request);
     Task<bool> DeleteTodoAsync(long id);
-    Task<TodoResponse?> UpdateTodoCompleteAsync(long id, bool isCompleted);
+    Task<TodoResponse?> CompleteTodoAsync(long id);
 }

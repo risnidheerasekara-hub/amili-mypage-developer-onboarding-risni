@@ -19,7 +19,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Amili.Myapp.Todo.Service.API\Amili.Myapp.Todo.Service.API.csproj" />
-    <ProjectReference Include="..\Amili.Myapp.Todo.Service.Implementation\Amili.Myapp.Todo.Service.Implementation.csproj" />
   </ItemGroup>
 
   <ItemGroup>
