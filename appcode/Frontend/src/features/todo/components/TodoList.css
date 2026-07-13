@@ -60,6 +60,7 @@
   background: var(--color-surface);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-md);
+  /* width: 100%; */
   overflow: hidden;
 }
 
@@ -79,7 +80,6 @@
 }
 
 .todo-table tbody tr {
-  cursor: pointer;
   transition: background 0.12s;
 }
 
@@ -110,28 +110,43 @@
 }
 
 .status-toggle {
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  border: 2px solid var(--color-border);
   background: transparent;
-  cursor: pointer;
+  border: none;
+  padding: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0;
-  transition: background 0.15s, border-color 0.15s;
+  color: var(--color-border);
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.status-toggle:hover {
+  color: var(--color-text-muted);
 }
 
 .status-toggle.is-complete {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
-  color: white;
+  color: var(--color-primary);
 }
 
-.status-toggle svg {
-  width: 14px;
-  height: 14px;
+.status-toggle.is-complete:hover {
+  color: var(--color-primary-hover);
+}
+
+.status-checkbox__spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .empty-state,
@@ -139,4 +154,68 @@
   padding: 3rem 1.5rem;
   text-align: center;
   color: var(--color-text-muted);
+}
+
+.actions-cell {
+  text-align: center;
+  width: 48px;
+}
+
+.actions-trigger {
+  background: transparent;
+  border: none;
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.12s;
+}
+
+.actions-trigger:hover {
+  background: #f4f6fb;
+  color: var(--color-text);
+}
+
+.actions-menu__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+}
+
+.actions-menu {
+  position: fixed;
+  z-index: 20;
+  min-width: 120px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.actions-menu button {
+  all: unset;
+  box-sizing: border-box;
+  padding: 0.55rem 0.9rem;
+  font-size: 0.88rem;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background 0.12s;
+  text-align: left;
+}
+
+.actions-menu button:hover {
+  background: #f4f6fb;
+}
+
+.actions-menu__delete {
+  color: #dc2626;
+}
+
+.actions-menu__delete:hover {
+  background: #fef2f2;
 }
