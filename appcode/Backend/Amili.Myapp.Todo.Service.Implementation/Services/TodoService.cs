@@ -83,6 +83,8 @@ public class TodoService(TodoDbContext dbcontext, IMapper mapper) : ITodoService
             todoItem.CompletedAt = null;
         }
 
+        await dbcontext.SaveChangesAsync();
+
         return mapper.Map<TodoResponse>(todoItem);
     }
 }
