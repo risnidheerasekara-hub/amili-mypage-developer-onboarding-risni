@@ -46,11 +46,11 @@ public class TodoService(TodoDbContext dbcontext, IMapper mapper) : ITodoService
             return null;
         }
 
-        if (request.Name != null || request.Name != "")
+        if (!string.IsNullOrEmpty(request.Name))
         {
             todoItem.Name = request.Name;
         }
-        if (request.Description != null || request.Description != "")
+        if (!string.IsNullOrEmpty(request.Description))
         {
             todoItem.Description = request.Description;
         }
@@ -69,8 +69,8 @@ public class TodoService(TodoDbContext dbcontext, IMapper mapper) : ITodoService
         }
 
         dbcontext.Todos.Remove(todoItem);
-        await dbcontext.SaveChangesAsync();
-        return true;
+        var rowsAffected = await dbcontext.SaveChangesAsync();
+        return rowsAffected>0;
     }
 
     public async Task<TodoResponse?> CompleteTodoAsync(long id)

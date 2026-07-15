@@ -25,9 +25,12 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod());
 });
 
-
 var app = builder.Build();
 // Configure the HTTP request pipeline.
+using var services = app.Services.CreateScope(); 
+var dbContext = services.ServiceProvider.GetRequiredService<TodoDbContext>(); 
+dbContext.Database.Migrate();
+
 
 app.UseHttpsRedirection();
 app.UseCors("AllowReactDev");

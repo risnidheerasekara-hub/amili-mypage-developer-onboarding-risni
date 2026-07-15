@@ -17,7 +17,7 @@ public class TodoItemsController(ITodoService todoService) : ControllerBase
     public async Task<IActionResult> CreateTodoItem([FromBody] CreateTodoRequest request)
     {
         var response = await todoService.CreateTodoAsync(request);
-        return CreatedAtAction(nameof(GetTodoItemById), new { id = response.Id }, response);
+        return Created($"/api/todos/{response.Id}", response);
     }
 
     [HttpGet("{id}")]
@@ -56,7 +56,7 @@ public class TodoItemsController(ITodoService todoService) : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteTodoItem(long id)
     {
@@ -66,13 +66,13 @@ public class TodoItemsController(ITodoService todoService) : ControllerBase
         {
             return NotFound();
         }
-        return NoContent();
+        return Ok(deleted);
     }
 
     [HttpPatch("{id}/complete")]
     [ProducesResponseType(typeof(TodoResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdateTodoItemComplete(long id)
+    public async Task<IActionResult> CompleteTodoAsync(long id)
     {
         var response = await todoService.CompleteTodoAsync(id);
         if (response == null)
