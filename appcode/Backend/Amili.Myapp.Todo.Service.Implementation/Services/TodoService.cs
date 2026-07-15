@@ -7,8 +7,9 @@ using Amili.Myapp.Todo.Service.Implementation.Data;
 using Amili.Myapp.Todo.Service.Core.Services;
 
 namespace Amili.Myapp.Todo.Service.Implementation.Services;
+
 public class TodoService(TodoDbContext dbcontext, IMapper mapper) : ITodoService
-    {
+{
     public async Task<TodoResponse> CreateTodoAsync(CreateTodoRequest request)
     {
         var todoItem = mapper.Map<DataModels.Todo>(request);
@@ -45,7 +46,15 @@ public class TodoService(TodoDbContext dbcontext, IMapper mapper) : ITodoService
             return null;
         }
 
-        mapper.Map(request, todoItem);
+        if (request.Name != null || request.Name != "")
+        {
+            todoItem.Name = request.Name;
+        }
+        if (request.Description != null || request.Description != "")
+        {
+            todoItem.Description = request.Description;
+        }
+
         await dbcontext.SaveChangesAsync();
 
         return mapper.Map<TodoResponse>(todoItem);
@@ -64,7 +73,7 @@ public class TodoService(TodoDbContext dbcontext, IMapper mapper) : ITodoService
         return true;
     }
 
-    public async Task<TodoResponse?> UpdateTodoCompleteAsync(long id, bool isCompleted)
+    public async Task<TodoResponse?> CompleteTodoAsync(long id)
     {
         var todoItem = await dbcontext.Todos.FindAsync(id);
         if (todoItem == null)
@@ -72,16 +81,10 @@ public class TodoService(TodoDbContext dbcontext, IMapper mapper) : ITodoService
             return null;
         }
 
-        if (isCompleted)
-        {
-            todoItem.IsCompleted = isCompleted;
-            todoItem.CompletedAt = DateTime.UtcNow;
-        }
-        if (!isCompleted)
-        {
-            todoItem.IsCompleted = isCompleted;
-            todoItem.CompletedAt = null;
-        }
+        todoItem.IsCompleted = true;
+        todoItem.CompletedAt = DateTime.UtcNow;
+
+        await dbcontext.SaveChangesAsync();
 
         await dbcontext.SaveChangesAsync();
 
