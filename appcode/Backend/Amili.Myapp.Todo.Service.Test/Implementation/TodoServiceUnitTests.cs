@@ -3,9 +3,7 @@ using Amili.Myapp.Todo.Service.Implementation.Mapper;
 using Amili.Myapp.Todo.Service.Implementation.Services;
 using Amili.Myapp.Todo.Service.Test.InMemoryDb;
 using AutoMapper;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json.Linq;
 using Datamodels = Amili.Myapp.Todo.Service.Core.DataModels;
 
 namespace Amili.Myapp.Todo.Service.Test.Implementation;
@@ -20,7 +18,7 @@ public class TodoServiceUnitTests
         _dbContext = new TodoDbContextInMemory();
 
         var services = new ServiceCollection();
-         services.AddLogging();
+        services.AddLogging();
         services.AddAutoMapper(cfg => { }, typeof(MapperProfile));
         var mapper = services.BuildServiceProvider().GetRequiredService<IMapper>();
 
@@ -30,10 +28,13 @@ public class TodoServiceUnitTests
     [Fact(DisplayName = "Create Todo item")]
     public async Task Should_ReturnCreatedAtActionResult_When_CreateTodoItem_WithValidRequest()
     {
+        //Arrange
         var request = new CreateTodoRequest { Name = "Buy groceries", Description = "Milk, eggs, bread" };
 
+        //Act
         var result = await _todoService.CreateTodoAsync(request);
 
+        //Assert
         Assert.NotNull(result);
         Assert.Equal(request.Name, result.Name);
         Assert.Equal(request.Description, result.Description);
@@ -43,6 +44,7 @@ public class TodoServiceUnitTests
     [Fact(DisplayName = "Get todo item with existing id")]
     public async Task Should_ReturnTodo_When_TodoExists()
     {
+        // Arrange
         var todo = new Datamodels.Todo
         {
             Name = "Test Todo",
@@ -55,8 +57,10 @@ public class TodoServiceUnitTests
         _dbContext.Add(todo);
         await _dbContext.SaveChangesAsync();
 
+        //Act
         var result = await _todoService.GetTodoByIdAsync(todo.Id);
 
+        //Assert
         Assert.NotNull(result);
         Assert.Equal(todo.Id, result.Id);
         Assert.Equal(todo.Name, result.Name);
@@ -68,13 +72,20 @@ public class TodoServiceUnitTests
     [Fact(DisplayName = "Get todo item with non existing id")]
     public async Task Should_ReturnNull_When_TodoDoesNotExist()
     {
-        var result = await _todoService.GetTodoByIdAsync(999);
+        // Arrange
+        var id = 999;
+
+        //Act
+        var result = await _todoService.GetTodoByIdAsync(id);
+
+        //Assert
         Assert.Null(result);
     }
 
     [Fact(DisplayName = "Update todo item with existing id")]
     public async Task Should_UpdateAndReturnTodo_When_UpdateTodoAsync_IsInvokedWithExistingIdAndValidRequest()
     {
+        // Arrange
         var todo = new Datamodels.Todo
         {
             Name = "Test Todo",
@@ -90,7 +101,11 @@ public class TodoServiceUnitTests
             Name = "Updated Todo",
             Description = "Updated Description"
         };
+
+        // Act
         var result = await _todoService.UpdateTodoAsync(todo.Id, updateRequest);
+
+        //Assert
         Assert.NotNull(result);
         Assert.Equal(todo.Id, result.Id);
         Assert.Equal(updateRequest.Name, result.Name);
@@ -100,18 +115,24 @@ public class TodoServiceUnitTests
     [Fact(DisplayName = "Update todo item with non existing id")]
     public async Task Should_ReturnNull_When_UpdateTodoAsync_IsInvokedWithNonExistingId()
     {
+        // Arrange
         var updateRequest = new UpdateTodoRequest
         {
             Name = "Updated Todo",
             Description = "Updated Description"
         };
+
+        // Act
         var result = await _todoService.UpdateTodoAsync(999, updateRequest);
+
+        //Assert
         Assert.Null(result);
     }
 
     [Fact(DisplayName = "Update todo item with null description")]
     public async Task Should_KeepExistingDescription_When_UpdateTodoAsync_IsInvokedWithNullDescription()
     {
+        // Arrange
         var todo = new Datamodels.Todo
         {
             Name = "Test Todo",
@@ -127,7 +148,11 @@ public class TodoServiceUnitTests
             Name = "Updated Todo",
             Description = null
         };
+
+        // Act
         var result = await _todoService.UpdateTodoAsync(todo.Id, updateRequest);
+
+        //Assert
         Assert.NotNull(result);
         Assert.Equal(todo.Id, result.Id);
         Assert.Equal(updateRequest.Name, result.Name);
@@ -137,6 +162,8 @@ public class TodoServiceUnitTests
     [Fact(DisplayName = "Delete todo item with existing id")]
     public async Task Should_ReturnTrueAndRemoveTodo_When_DeleteTodoAsync_IsInvokedWithExistingId()
     {
+
+        // Arrange
         var todo = new Datamodels.Todo
         {
             Name = "Test Todo",
@@ -147,20 +174,31 @@ public class TodoServiceUnitTests
         };
         _dbContext.Add(todo);
         await _dbContext.SaveChangesAsync();
+
+        //Act
         var result = await _todoService.DeleteTodoAsync(todo.Id);
+
+        //Assert
         Assert.True(result);
     }
 
     [Fact(DisplayName = "Delete todo item with non existing id")]
     public async Task Should_ReturnFalse_When_DeleteTodoAsync_IsInvokedWithNonExistingId()
     {
-        var result = await _todoService.DeleteTodoAsync(999);
+        //Arrange
+        var id = 999;
+
+        //Act
+        var result = await _todoService.DeleteTodoAsync(id);
+
+        //Assert
         Assert.False(result);
     }
 
-    [Fact(DisplayName = "Update todo item complete with existing id and true")]
-    public async Task Should_SetIsCompletedTrueAndCompletedAt_When_UpdateTodoCompleteAsync_IsInvokedWithTrue()
+    [Fact(DisplayName = "Update todo item complete with existing id")]
+    public async Task Should_SetIsCompletedTrueAndCompletedAt_When_UpdateTodoCompleteAsync_IsInvoked()
     {
+        //Arrange
         var todo = new Datamodels.Todo
         {
             Name = "Test Todo",
@@ -171,41 +209,34 @@ public class TodoServiceUnitTests
         };
         _dbContext.Add(todo);
         await _dbContext.SaveChangesAsync();
-        var result = await _todoService.UpdateTodoCompleteAsync(todo.Id, true);
+
+        //Act
+        var result = await _todoService.CompleteTodoAsync(todo.Id);
+
+        //Assert
         Assert.NotNull(result);
         Assert.True(result.IsCompleted);
         Assert.NotNull(result.CompletedAt);
     }
 
-    [Fact(DisplayName = "Update todo item complete with existing id and false")]
-    public async Task Should_ClearCompletedAt_When_UpdateTodoCompleteAsync_IsInvokedWithFalse()
-    {
-        var todo = new Datamodels.Todo
-        {
-            Name = "Test Todo",
-            Description = "Test Description",
-            CreatedAt = DateTime.UtcNow,
-            IsCompleted = true,
-            CompletedAt = DateTime.UtcNow
-        };
-        _dbContext.Add(todo);
-        await _dbContext.SaveChangesAsync();
-        var result = await _todoService.UpdateTodoCompleteAsync(todo.Id, false);
-        Assert.NotNull(result);
-        Assert.False(result.IsCompleted);
-        Assert.Null(result.CompletedAt);
-    }
-
     [Fact(DisplayName = "Update todo item complete with non existing id")]
     public async Task Should_ReturnNull_When_UpdateTodoCompleteAsync_IsInvokedWithNonExistingId()
     {
-        var result = await _todoService.UpdateTodoCompleteAsync(999, true);
+        //Arrange
+        var id = 999;
+
+        //Act
+        var result = await _todoService.CompleteTodoAsync(id);
+
+        //Assert
         Assert.Null(result);
     }
 
     [Fact(DisplayName = "Update todo item complete should persist change to database")]
     public async Task Should_PersistChangeToDatabase_When_UpdateTodoCompleteAsync_IsInvoked()
     {
+
+        //Arrange
         var todo = new Datamodels.Todo
         {
             Name = "Test Todo",
@@ -216,8 +247,12 @@ public class TodoServiceUnitTests
         };
         _dbContext.Add(todo);
         await _dbContext.SaveChangesAsync();
-        await _todoService.UpdateTodoCompleteAsync(todo.Id, true);
+
+        //Act
+        await _todoService.CompleteTodoAsync(todo.Id);
         var updatedTodo = await _dbContext.Todos.FindAsync(todo.Id);
+
+        //Assert
         Assert.NotNull(updatedTodo);
         Assert.True(updatedTodo.IsCompleted);
         Assert.NotNull(updatedTodo.CompletedAt);

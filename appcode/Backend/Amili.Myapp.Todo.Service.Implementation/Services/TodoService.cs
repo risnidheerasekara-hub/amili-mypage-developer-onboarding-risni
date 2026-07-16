@@ -1,10 +1,10 @@
-﻿using DataModels = Amili.Myapp.Todo.Service.Core.DataModels;
-using Amili.Myapp.Todo.Service.Core.Models.Request;
+﻿using Amili.Myapp.Todo.Service.Core.Models.Request;
 using Amili.Myapp.Todo.Service.Core.Models.Response;
+using Amili.Myapp.Todo.Service.Core.Services;
+using Amili.Myapp.Todo.Service.Implementation.Data;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Amili.Myapp.Todo.Service.Implementation.Data;
-using Amili.Myapp.Todo.Service.Core.Services;
+using DataModels = Amili.Myapp.Todo.Service.Core.DataModels;
 
 namespace Amili.Myapp.Todo.Service.Implementation.Services;
 
@@ -70,7 +70,7 @@ public class TodoService(TodoDbContext dbcontext, IMapper mapper) : ITodoService
 
         dbcontext.Todos.Remove(todoItem);
         var rowsAffected = await dbcontext.SaveChangesAsync();
-        return rowsAffected>0;
+        return rowsAffected > 0;
     }
 
     public async Task<TodoResponse?> CompleteTodoAsync(long id)

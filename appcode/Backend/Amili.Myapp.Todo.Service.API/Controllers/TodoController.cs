@@ -56,7 +56,7 @@ public class TodoItemsController(ITodoService todoService) : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType<bool>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteTodoItem(long id)
     {

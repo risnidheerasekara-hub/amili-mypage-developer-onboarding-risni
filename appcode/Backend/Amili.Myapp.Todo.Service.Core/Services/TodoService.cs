@@ -1,5 +1,5 @@
-﻿using Amili.Myapp.Todo.Service.Core.Models.Response;
-using Amili.Myapp.Todo.Service.Core.Models.Request;
+﻿using Amili.Myapp.Todo.Service.Core.Models.Request;
+using Amili.Myapp.Todo.Service.Core.Models.Response;
 
 namespace Amili.Myapp.Todo.Service.Core.Services;
 
