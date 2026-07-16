@@ -1,5 +1,5 @@
-﻿using DataModels = Amili.Myapp.Todo.Service.Core.DataModels;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using DataModels = Amili.Myapp.Todo.Service.Core.DataModels;
 
 namespace Amili.Myapp.Todo.Service.Implementation.Data;
 

@@ -1,8 +1,8 @@
-using Amili.Myapp.Todo.Service.Implementation.Data;
-using Microsoft.EntityFrameworkCore;
 using Amili.Myapp.Todo.Service.Core.Services;
-using Amili.Myapp.Todo.Service.Implementation.Services;
+using Amili.Myapp.Todo.Service.Implementation.Data;
 using Amili.Myapp.Todo.Service.Implementation.Mapper;
+using Amili.Myapp.Todo.Service.Implementation.Services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -25,9 +25,12 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod());
 });
 
-
 var app = builder.Build();
 // Configure the HTTP request pipeline.
+using var services = app.Services.CreateScope();
+var dbContext = services.ServiceProvider.GetRequiredService<TodoDbContext>();
+dbContext.Database.Migrate();
+
 
 app.UseHttpsRedirection();
 app.UseCors("AllowReactDev");
