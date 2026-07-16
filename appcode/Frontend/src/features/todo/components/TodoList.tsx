@@ -29,9 +29,9 @@ export function TodoList() {
       .finally(() => setIsLoading(false));
   }
 
-  function toggleComplete(todo: Todo, isCompleted: boolean) {
+  function toggleComplete(todo: Todo) {
     setUpdatingIds(prev => new Set(prev).add(todo.id));
-    todoService.updateComplete(todo.id, isCompleted)
+    todoService.updateComplete(todo.id)
       .then(loadTodos)
       .finally(() => {
         setUpdatingIds(prev => {
@@ -117,7 +117,7 @@ export function TodoList() {
                       <button
                         type="button"
                         className={`status-toggle${todo.isCompleted ? ' is-complete' : ''}`}
-                        onClick={() => toggleComplete(todo, !todo.isCompleted)}
+                        onClick={() => !todo.isCompleted && toggleComplete(todo)}
                         aria-label={todo.isCompleted ? 'Mark as incomplete' : 'Mark as complete'}
                       >
                         {todo.isCompleted ? <CircleCheckBig size={20} /> : <Circle size={20} />}

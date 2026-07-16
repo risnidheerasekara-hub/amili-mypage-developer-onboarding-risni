@@ -31,10 +31,9 @@ export const todoService = {
   delete: (id: number): Promise<void> =>
     fetch(`${baseUrl}/${id}`, { method: 'DELETE' }).then(res => handleResponse<void>(res)),
 
-  updateComplete: (id: number, isCompleted: boolean): Promise<Todo> =>
-    fetch(`${baseUrl}/${id}`, {
+  updateComplete: (id: number): Promise<Todo> =>
+    fetch(`${baseUrl}/${id}/complete`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(isCompleted),
     }).then(res => handleResponse<Todo>(res)),
 };
