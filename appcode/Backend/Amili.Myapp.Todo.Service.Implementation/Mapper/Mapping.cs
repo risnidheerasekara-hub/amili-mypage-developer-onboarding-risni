@@ -13,6 +13,5 @@ public class MapperProfile : Profile
         CreateMap<DataModels.Todo, TodoResponse>();
         CreateMap<CreateTodoRequest, DataModels.Todo>().ForMember(
             dest => dest.CreatedAt, src => src.MapFrom(x => DateTime.UtcNow));
-        CreateMap<UpdateTodoRequest, DataModels.Todo>();
     }
 }
