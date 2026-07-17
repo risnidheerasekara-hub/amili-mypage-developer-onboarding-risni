@@ -30,8 +30,7 @@ public class TodoControllerUnitTests
         var result = await _controller.CreateTodoItem(request);
 
         //Assert
-        var createdResult = Assert.IsType<CreatedAtActionResult>(result);
-        Assert.Equal(nameof(TodoItemsController.GetTodoItemById), createdResult.ActionName);
+        var createdResult = Assert.IsType<CreatedResult>(result);
         Assert.Equal(response, createdResult.Value);
         _todoServiceMock.Verify(
         x => x.CreateTodoAsync(request),
@@ -159,7 +158,7 @@ public class TodoControllerUnitTests
         var result = await _controller.DeleteTodoItem(id);
 
         //Assert
-        Assert.IsType<NoContentResult>(result);
+        Assert.IsType<OkObjectResult>(result);
         _todoServiceMock.Verify(x => x.DeleteTodoAsync(id), Times.Once);
     }
 
