@@ -53,6 +53,7 @@ export function TodoList() {
   }
 
   function editTodo(todo: Todo) {
+          if (todo.isCompleted) return;
     setMenu(null);
     setDialogState(todo);
   }
@@ -148,7 +149,14 @@ export function TodoList() {
         <>
           <div className="actions-menu__backdrop" onClick={() => setMenu(null)} />
           <div className="actions-menu" style={{ top: menu.top, right: menu.right }}>
-            <button type="button" onClick={() => editTodo(menu.todo)}>Edit</button>
+            <button
+              type="button"
+              onClick={() => editTodo(menu.todo)}
+              disabled={menu.todo.isCompleted}
+              title={menu.todo.isCompleted ? 'Completed todos cannot be edited' : undefined}
+            >
+              Edit
+            </button>
             <button type="button" className="actions-menu__delete" onClick={() => deleteTodo(menu.todo)}>Delete</button>
           </div>
         </>,

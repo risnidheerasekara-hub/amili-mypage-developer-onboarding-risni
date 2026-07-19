@@ -229,3 +229,12 @@ th:first-child::before {
 .actions-menu button:hover {
   background: var(--color-table-strip);
 }
+
+.actions-menu button:disabled {
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+}
+
+.actions-menu button:disabled:hover {
+  background: transparent;
+}
