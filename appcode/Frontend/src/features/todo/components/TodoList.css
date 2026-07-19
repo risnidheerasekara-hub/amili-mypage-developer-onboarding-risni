@@ -77,12 +77,27 @@
   white-space: nowrap;
 }
 
-.todo-table tbody tr {
-  transition: background 0.12s;
+th {
+  position: relative;
+  padding-left: 12px; 
 }
 
-.todo-table tbody tr:nth-child(even) {
-  background: var(--color-table-strip);
+th::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 16px;       /* Length of the line */
+  background-color: #555;
+}
+th:first-child::before {
+  display: none;
+}
+
+.todo-table tbody tr {
+  transition: background 0.12s;
 }
 
 .todo-table tbody tr:hover {
@@ -94,7 +109,7 @@
 }
 
 .todo-table td {
-  padding: 0.9rem 1.25rem;
+  padding: 0.8rem;
   font-size: 0.92rem;
   vertical-align: middle;
   color: var(--color-text);
@@ -177,7 +192,7 @@
 }
 
 .actions-trigger:hover {
-  background: var(--color-header-bg);
+  background: var(--color-table-strip);
   color: var(--color-text);
 }
 
@@ -213,64 +228,4 @@
 
 .actions-menu button:hover {
   background: var(--color-table-strip);
-}
-
-.actions-menu__delete {
-  color: #ef4444;
-}
-
-.actions-menu__delete:hover {
-  background: rgba(239, 68, 68, 0.12);
-  text-align: left;
-}
-
-.actions-menu button:hover {
-  background: #f4f6fb;
-}
-
-.actions-menu__delete {
-  color: #dc2626;
-}
-
-.actions-menu__delete:hover {
-  background: #fef2f2;
--align: left;
-}
-
-.actions-menu button:hover {
-  background: #f4f6fb;
-}
-
-.actions-menu__delete {
-  color: #dc2626;
-}
-
-.actions-menu__delete:hover {
-  background: #fef2f2;
--align: left;
-}
-
-.actions-menu button:hover {
-  background: #f4f6fb;
-}
-
-.actions-menu__delete {
-  color: #dc2626;
-}
-
-.actions-menu__delete:hover {
-  background: #fef2f2;
-t-align: left;
-}
-
-.actions-menu button:hover {
-  background: #f4f6fb;
-}
-
-.actions-menu__delete {
-  color: #dc2626;
-}
-
-.actions-menu__delete:hover {
-  background: #fef2f2;
 }
