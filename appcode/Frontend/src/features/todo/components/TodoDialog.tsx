@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { type Todo } from '../models/todo';
 import { todoService } from '../services/todoService';
+import { showToast } from '../../../shared/components/Toast';
 import './TodoDialog.css';
 
 interface TodoDialogProps {
@@ -11,9 +12,12 @@ interface TodoDialogProps {
 }
 
 export function TodoDialog({ todo, onClose, onSaved }: TodoDialogProps) {
-  const [name, setName] = useState(todo?.name ?? '');
-  const [description, setDescription] = useState(todo?.description ?? '');
+  const initialName = todo?.name ?? '';
+  const initialDescription = todo?.description ?? '';
+  const [name, setName] = useState(initialName);
+  const [description, setDescription] = useState(initialDescription);
   const [isSaving, setIsSaving] = useState(false);
+  const hasChanges = name !== initialName || description !== initialDescription;
 
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
@@ -32,9 +36,11 @@ export function TodoDialog({ todo, onClose, onSaved }: TodoDialogProps) {
 
     result
       .then(() => {
+        showToast(todo ? `"${name}" updated.` : `"${name}" added.`, 'success');
         onSaved();
         onClose();
       })
+      .catch(() => showToast(`Failed to ${todo ? 'update' : 'add'} todo.`, 'error'))
       .finally(() => setIsSaving(false));
   }
 
@@ -66,7 +72,7 @@ export function TodoDialog({ todo, onClose, onSaved }: TodoDialogProps) {
           <button className="btn-secondary" onClick={onClose}>
             Cancel
           </button>
-          <button className="btn-primary" onClick={save} disabled={!name.trim() || isSaving}>
+          <button className="btn-primary" onClick={save} disabled={!hasChanges || !name.trim() || isSaving}>
             {isSaving ? 'Saving…' : 'Save'}
           </button>
         </div>

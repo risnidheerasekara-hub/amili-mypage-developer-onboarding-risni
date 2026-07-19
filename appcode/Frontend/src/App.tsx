@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
 import { TopHeader } from './shared/components/Header';
+import { ToastContainer } from './shared/components/Toast';
 import './App.css';
 
 const TodoList = lazy(() =>
@@ -22,6 +23,7 @@ export function App() {
           </Suspense>
         </main>
       </div>
+      <ToastContainer />
     </BrowserRouter>
   );
 }

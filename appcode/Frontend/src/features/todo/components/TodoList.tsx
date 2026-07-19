@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { type Todo } from '../models/todo';
 import { todoService } from '../services/todoService';
 import { TodoDialog } from './TodoDialog';
+import { showToast } from '../../../shared/components/Toast';
 import './TodoList.css';
 import { EllipsisVertical, Circle, CircleCheckBig } from 'lucide-react';
 
@@ -29,7 +30,7 @@ export function TodoList() {
       .finally(() => setIsLoading(false));
   }
 
-  function toggleComplete(todo: Todo) {
+  function markComplete(todo: Todo) {
     setUpdatingIds(prev => new Set(prev).add(todo.id));
     todoService.updateComplete(todo.id)
       .then(loadTodos)
@@ -42,7 +43,7 @@ export function TodoList() {
       });
   }
 
-  function toggleMenu(todo: Todo, e: React.MouseEvent<HTMLButtonElement>) {
+  function openMenu(todo: Todo, e: React.MouseEvent<HTMLButtonElement>) {
     if (menu?.todo.id === todo.id) {
       setMenu(null);
       return;
@@ -61,7 +62,12 @@ export function TodoList() {
     if (!window.confirm(`Delete "${todo.name}"?`)) {
       return;
     }
-    todoService.delete(todo.id).then(loadTodos);
+    todoService.delete(todo.id)
+      .then(() => {
+        showToast(`"${todo.name}" deleted.`, 'success');
+        loadTodos();
+      })
+      .catch(() => showToast(`Failed to delete "${todo.name}".`, 'error'));
   }
 
   const filteredTodos = todos.filter(t =>
@@ -109,7 +115,7 @@ export function TodoList() {
                       type="button"
                       className="actions-trigger"
                       aria-label="Open actions menu"
-                      onClick={e => toggleMenu(todo, e)}
+                      onClick={e => openMenu(todo, e)}
                     >
                       <EllipsisVertical size={18} />
                     </button>
@@ -124,8 +130,7 @@ export function TodoList() {
                       <button
                         type="button"
                         className={`status-toggle${todo.isCompleted ? ' is-complete' : ''}`}
-                        onClick={() => !todo.isCompleted && toggleComplete(todo)}
-                        aria-label={todo.isCompleted ? 'Mark as incomplete' : 'Mark as complete'}
+                        onClick={() => !todo.isCompleted && markComplete(todo)}
                       >
                         {todo.isCompleted ? <CircleCheckBig size={20} /> : <Circle size={20} />}
                       </button>
