@@ -6,9 +6,7 @@ import './App.css';
 const TodoList = lazy(() =>
   import('./features/todo/components/TodoList').then(m => ({ default: m.TodoList }))
 );
-const TodoDetail = lazy(() =>
-  import('./features/todo/components/TodoDetail').then(m => ({ default: m.TodoDetail }))
-);
+
 
 export function App() {
   return (
@@ -20,8 +18,6 @@ export function App() {
             <Routes>
               <Route path="/" element={<Navigate to="/todo" replace />} />
               <Route path="/todo" element={<TodoList />} />
-              <Route path="/todo/new" element={<TodoDetail />} />
-              <Route path="/todo/:id" element={<TodoDetail />} />
             </Routes>
           </Suspense>
         </main>

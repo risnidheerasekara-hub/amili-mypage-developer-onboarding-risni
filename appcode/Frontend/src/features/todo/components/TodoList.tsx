@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { useNavigate } from 'react-router-dom';
 import { type Todo } from '../models/todo';
 import { todoService } from '../services/todoService';
+import { TodoDialog } from './TodoDialog';
 import './TodoList.css';
 import { EllipsisVertical, Circle, CircleCheckBig } from 'lucide-react';
 
@@ -18,7 +18,7 @@ export function TodoList() {
   const [isLoading, setIsLoading] = useState(true);
   const [updatingIds, setUpdatingIds] = useState<Set<number>>(new Set());
   const [menu, setMenu] = useState<MenuState | null>(null);
-  const navigate = useNavigate();
+  const [dialogState, setDialogState] = useState<'new' | Todo | null>(null);
 
   useEffect(() => { loadTodos(); }, []);
 
@@ -53,7 +53,7 @@ export function TodoList() {
 
   function editTodo(todo: Todo) {
     setMenu(null);
-    navigate(`/todo/${todo.id}`);
+    setDialogState(todo);
   }
 
   function deleteTodo(todo: Todo) {
@@ -70,17 +70,14 @@ export function TodoList() {
 
   return (
     <div className="todo-list">
-      <div className="todo-list__header">
-        <h2>Todos</h2>
-      </div>
 
       <div className="toolbar">
         <input
           value={searchTerm}
           onChange={e => setSearchTerm(e.target.value)}
-          placeholder="Search todos…"
+          placeholder="Search"
         />
-        <button className="btn-add" onClick={() => navigate('/todo/new')} aria-label="Add todo">
+        <button className="btn-add" onClick={() => setDialogState('new')} aria-label="Add todo">
           +
         </button>
       </div>
@@ -96,17 +93,27 @@ export function TodoList() {
           <table className="todo-table">
             <thead>
               <tr>
+                <th></th>
                 <th>Name</th>
                 <th>Description</th>
                 <th>Created Time</th>
                 <th>Is Completed</th>
                 <th>Completed</th>
-                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {filteredTodos.map(todo => (
                 <tr key={todo.id} >
+                  <td className="actions-cell">
+                    <button
+                      type="button"
+                      className="actions-trigger"
+                      aria-label="Open actions menu"
+                      onClick={e => toggleMenu(todo, e)}
+                    >
+                      <EllipsisVertical size={18} />
+                    </button>
+                  </td>
                   <td className="todo-name">{todo.name}</td>
                   <td className="todo-description">{todo.description}</td>
                   <td>{new Date(todo.createdAt).toLocaleString()}</td>
@@ -125,16 +132,6 @@ export function TodoList() {
                     )}
                   </td>
                   <td>{(todo.completedAt !== null && todo.completedAt !== undefined) ? new Date(todo.completedAt).toLocaleString() : '—'}</td>
-                  <td className="actions-cell">
-                    <button
-                      type="button"
-                      className="actions-trigger"
-                      aria-label="Open actions menu"
-                      onClick={e => toggleMenu(todo, e)}
-                    >
-                      <EllipsisVertical size={18} />
-                    </button>
-                  </td>
                 </tr>
               ))}
             </tbody>
@@ -151,6 +148,14 @@ export function TodoList() {
           </div>
         </>,
         document.body
+      )}
+
+      {dialogState && (
+        <TodoDialog
+          todo={dialogState === 'new' ? null : dialogState}
+          onClose={() => setDialogState(null)}
+          onSaved={loadTodos}
+        />
       )}
     </div>
   );
