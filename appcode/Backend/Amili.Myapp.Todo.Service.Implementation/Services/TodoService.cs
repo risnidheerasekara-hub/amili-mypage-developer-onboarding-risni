@@ -84,6 +84,8 @@ public class TodoService(TodoDbContext dbcontext, IMapper mapper) : ITodoService
         todoItem.IsCompleted = true;
         todoItem.CompletedAt = DateTime.UtcNow;
 
+        await dbcontext.SaveChangesAsync();
+
         return mapper.Map<TodoResponse>(todoItem);
     }
 }

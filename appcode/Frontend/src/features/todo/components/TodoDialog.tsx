@@ -1,0 +1,83 @@
+import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { type Todo } from '../models/todo';
+import { todoService } from '../services/todoService';
+import { showToast } from '../../../shared/components/Toast';
+import './TodoDialog.css';
+
+interface TodoDialogProps {
+  todo?: Todo | null;
+  onClose: () => void;
+  onSaved: () => void;
+}
+
+export function TodoDialog({ todo, onClose, onSaved }: TodoDialogProps) {
+  const initialName = todo?.name ?? '';
+  const initialDescription = todo?.description ?? '';
+  const [name, setName] = useState(initialName);
+  const [description, setDescription] = useState(initialDescription);
+  const [isSaving, setIsSaving] = useState(false);
+  const hasChanges = name !== initialName || description !== initialDescription;
+
+  useEffect(() => {
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') onClose();
+    }
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [onClose]);
+
+  function save() {
+    setIsSaving(true);
+    const request = { name, description };
+    const result = todo
+      ? todoService.update(todo.id, request)
+      : todoService.create(request);
+
+    result
+      .then(() => {
+        showToast(todo ? `"${name}" updated.` : `"${name}" added.`, 'success');
+        onSaved();
+        onClose();
+      })
+      .catch(() => showToast(`Failed to ${todo ? 'update' : 'add'} todo.`, 'error'))
+      .finally(() => setIsSaving(false));
+  }
+
+  return createPortal(
+    <div className="todo-dialog__backdrop" onClick={onClose}>
+      <div className="todo-dialog" onClick={e => e.stopPropagation()}>
+        <h2>{todo ? 'Edit Todo' : 'New Todo'}</h2>
+
+        <label>
+          Name
+          <input
+            value={name}
+            onChange={e => setName(e.target.value)}
+            placeholder="e.g. Buy groceries"
+            autoFocus
+          />
+        </label>
+        <label>
+          Description
+          <textarea
+            rows={4}
+            value={description}
+            onChange={e => setDescription(e.target.value)}
+            placeholder="Optional details"
+          />
+        </label>
+
+        <div className="todo-dialog__actions">
+          <button className="btn-secondary" onClick={onClose}>
+            Cancel
+          </button>
+          <button className="btn-primary" onClick={save} disabled={!hasChanges || !name.trim() || isSaving}>
+            {isSaving ? 'Saving…' : 'Save'}
+          </button>
+        </div>
+      </div>
+    </div>,
+    document.body
+  );
+}
