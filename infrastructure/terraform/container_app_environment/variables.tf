@@ -19,14 +19,6 @@ variable "tags" {
   description = "required tags"
 }
 
-variable "os_type" {
-  description = "os type"
-}
-
-variable "asp_sku_name" {
-  description = "app serviceplan sku name"
-}
-
 variable "resource_group_name" {
   description = "azure resource group name"
 }
