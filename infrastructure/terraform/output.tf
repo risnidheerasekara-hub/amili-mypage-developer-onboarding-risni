@@ -5,7 +5,7 @@ output "frontend_url" {
 
 output "backend_url" {
   description = "Public URL of the App Service (your API)"
-  value       = "https://${module.app_service.default_hostname}"
+  value       = "https://${module.container-app.default_hostname}"
 }
 
 output "static_web_app_deployment_token" {
@@ -17,4 +17,21 @@ output "static_web_app_deployment_token" {
 output "postgres_server_fqdn" {
   description = "Fully qualified domain name of the PostgreSQL server"
   value       = module.postgres_server.server_fqdn
+}
+
+output "acr_login_server" {
+  description = "Azure Container Registry login server"
+  value       = module.container_registry.login_server
+}
+
+output "acr_admin_username" {
+  description = "ACR admin username for docker login"
+  value       = module.container_registry.admin_username
+  sensitive   = true
+}
+
+output "acr_admin_password" {
+  description = "ACR admin password for docker login"
+  value       = module.container_registry.admin_password
+  sensitive   = true
 }

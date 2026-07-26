@@ -1,8 +1,8 @@
 locals {
   tags = {
-    product     = var.prefix
-    environment = var.environment
-    service     = var.service
+    product          = var.prefix
+    environment      = var.environment
+    service          = var.service
     location         = var.location
     created_by       = var.created_by
     provisioned_with = var.provisioned_with
@@ -35,51 +35,62 @@ module "static_web_app" {
   prefix              = var.prefix
   environment         = var.environment
   service             = var.service
-  location            = var.location
+  location            = var.swa_location
   resource_group_name = module.resource_group.azure-rg-name
   sku_tier            = var.swa_sku_tier
   tags                = local.tags
 }
 
-module "app_service_plan" {
-  source              = "./app-service-plan"
+module "container_registry" {
+  source              = "./container-registry"
   prefix              = var.prefix
   environment         = var.environment
   service             = var.service
   location            = var.location
   resource_group_name = module.resource_group.azure-rg-name
-  os_type             = var.os_type
-  asp_sku_name        = var.asp_sku_name
+  tags                = local.tags
+}
+
+module "container_app_environment" {
+  source              = "./container_app_environment"
+  prefix              = var.prefix
+  environment         = var.environment
+  service             = var.service
+  location            = var.location
+  resource_group_name = module.resource_group.azure-rg-name
   tags                = local.tags
 }
 
 module "postgres_server" {
-  source               = "./postgres-server"  
-  prefix               = var.prefix
-  environment          = var.environment
-  service              = var.service
-  location             = var.location
-  resource_group_name  = module.resource_group.azure-rg-name
-  administrator_login  = var.postgres_admin_login
+  source                 = "./postgres-server"
+  prefix                 = var.prefix
+  environment            = var.environment
+  service                = var.service
+  location               = var.location
+  resource_group_name    = module.resource_group.azure-rg-name
+  administrator_login    = var.postgres_admin_login
   administrator_password = random_password.postgres_admin_password.result
-  postgresql_version   = var.postgresql_version
-  postgresql_sku       = var.postgresql_sku
-  storage_mb           = var.postgres_storage_mb
-  tags                 = local.tags
+  postgresql_version     = var.postgresql_version
+  postgresql_sku         = var.postgresql_sku
+  storage_mb             = var.postgres_storage_mb
+  tags                   = local.tags
 }
 
-module "app_service" {
-  source              = "./app-service"
-  name                = "${var.prefix}-${var.environment}-${var.service}-api"
-  location            = var.location
-  resource_group_name = module.resource_group.azure-rg-name
-  asp_id              = module.app_service_plan.asp_id
-  tags                = local.tags
+module "container-app" {
+  source               = "./container-app"
+  name                 = "${var.prefix}-${var.environment}-${var.service}-api"
+  location             = var.location
+  resource_group_name  = module.resource_group.azure-rg-name
+  container_app_env_id = module.container_app_environment.env_id
+  image                = "amilidevmypageregistry.azurecr.io/amili-mypage-api:v1"
+  registry_server      = module.container_registry.login_server
+  registry_username    = module.container_registry.admin_username
+  registry_password    = module.container_registry.admin_password
+  tags                 = local.tags
 
   app_settings = {
-    "DATABASE_URL"           = local.database_connection_string
-    "ASPNETCORE_ENVIRONMENT" = var.environment
-    "WEBSITE_RUN_FROM_PACKAGE" = "1"
+    "ConnectionStrings__DefaultConnection" = local.database_connection_string
+    "ASPNETCORE_ENVIRONMENT"               = var.environment
   }
 }
 

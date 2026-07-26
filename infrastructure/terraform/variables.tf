@@ -1,14 +1,8 @@
 
-variable "os_type" {
-  description = "OS for the App Service Plan: Linux or Windows"
+variable "swa_location" {
+  description = "Location for Static Web App (limited regions: centralus, eastus2, westus2, westeurope, eastasia)"
   type        = string
-  default     = "Linux"
-}
-
-variable "asp_sku_name" {
-  description = "SKU for the App Service Plan, e.g. B1, P1v3"
-  type        = string
-  default     = "B1"
+  default     = "westeurope"
 }
 
 variable "postgres_admin_login" {

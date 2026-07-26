@@ -47,7 +47,7 @@ variable "service" {
 
 variable "location" {
   description = "Azure region for resources"
-  default     = "westeurope"
+  default     = "northeurope"
 }
 
 variable "provisioned_with" {
