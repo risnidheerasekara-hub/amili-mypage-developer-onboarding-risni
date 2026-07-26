@@ -1,1 +1,1 @@
-export const API_BASE_URL = "http://localhost:5058";
+export const API_BASE_URL = "https://amili-dev-mypage-api--op0uabt.prouddune-d3e93f86.northeurope.azurecontainerapps.io";
