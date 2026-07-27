@@ -18,7 +18,7 @@ resource "azurerm_container_app" "app" {
 
   template {
     container {
-      name   = "api"
+      name   = "api" # container app var.name
       image  = var.image
       cpu    = 0.25
       memory = "0.5Gi"
