@@ -488,5 +488,3 @@ $RECYCLE.BIN/
 *.tfstate.backup
 **/.terraform.lock.hcl
 
-# Node
-package-lock.json
