@@ -1,6 +1,8 @@
 .todo-list {
   display: flex;
   flex-direction: column;
+  flex: 1;
+  min-height: 0;
   gap: 1.25rem;
 }
 
@@ -21,7 +23,7 @@
   background: var(--color-bg);
   color: var(--color-text);
   font-size: 0.95rem; 
-  width: 400px;
+  width: 250px;
 }
 
 
@@ -38,28 +40,34 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
+  padding-bottom: 0.3rem; 
   border: none;
   background: var(--color-primary);
   color: white;
-  font-size: 1.4rem;
-  line-height: 1;
+  font-size: 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
   box-shadow: var(--shadow-sm);
-  flex-shrink: 0;
 }
 
 .toolbar .btn-add:hover {
   background: var(--color-primary-hover);
 }
 
-.toolbar .btn-add:active {
-  transform: scale(0.96);
+.todo-list__card {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
 }
 
-.todo-list__card {
+.todo-table-wrapper {
+  flex: 1;
   overflow-x: auto;
+  overflow-y: auto;
 }
 
 .todo-table {
@@ -75,6 +83,10 @@
   padding: 0.9rem 1.25rem;
   border-bottom: 1px solid var(--color-border);
   white-space: nowrap;
+}
+
+.todo-table tr:nth-child(even) {
+  background: var(--color-table-strip);
 }
 
 th {
@@ -169,7 +181,6 @@ th:first-child::before {
 
 .empty-state,
 .loading-state {
-  padding: 3rem 1.5rem;
   text-align: center;
   color: var(--color-text-muted);
 }
