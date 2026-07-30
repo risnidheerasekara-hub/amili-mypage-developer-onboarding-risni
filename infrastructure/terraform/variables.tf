@@ -5,6 +5,12 @@ variable "swa_location" {
   default     = "westeurope"
 }
 
+variable "app_service_location" {
+  description = "Location for App Service Plan and App Service"
+  type        = string
+  default     = "swedencentral"
+}
+
 variable "postgres_admin_login" {
   description = "PostgreSQL administrator username"
   type        = string

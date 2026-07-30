@@ -94,4 +94,28 @@ module "container-app" {
   }
 }
 
+module "app_service_plan" {
+  source              = "./app-service-plan"
+  prefix              = var.prefix
+  environment         = var.environment
+  service             = var.service
+  location            = var.app_service_location
+  resource_group_name = module.resource_group.azure-rg-name
+  tags                = local.tags
+}
 
+module "backend_app" {
+  source              = "./app-service"
+  prefix              = var.prefix
+  environment         = var.environment
+  service             = var.service
+  resource_group_name = module.resource_group.azure-rg-name
+  location            = var.app_service_location
+  service_plan_id     = module.app_service_plan.plan_id
+  tags                = local.tags
+
+  app_settings = {
+    "ConnectionStrings__DefaultConnection" = local.database_connection_string
+    "ASPNETCORE_ENVIRONMENT"               = var.environment == "prod" ? "Production" : "Development"
+  }
+}
