@@ -5,7 +5,7 @@ output "frontend_url" {
 
 output "backend_url" {
   description = "Public URL of the App Service (your API)"
-  value       = "https://${module.backend_app.default_hostname}"
+  value       = "https://${module.app_service.default_hostname}"
 }
 
 output "static_web_app_deployment_token" {

@@ -1,4 +1,4 @@
-resource "azurerm_static_web_app" "frontend" {
+resource "azurerm_static_web_app" "static_web_app" {
   name                = "${var.prefix}-${var.environment}-${var.service}-swa"
   resource_group_name = var.resource_group_name
   location            = var.location

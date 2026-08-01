@@ -1,5 +1,5 @@
-resource "azurerm_container_app" "app" {
-  name                         = var.name
+resource "azurerm_container_app" "container_app" {
+  name                         = "${var.prefix}-${var.environment}-${var.service}-capp"
   container_app_environment_id = var.container_app_env_id
   resource_group_name          = var.resource_group_name
   revision_mode                = "Single"
@@ -18,7 +18,7 @@ resource "azurerm_container_app" "app" {
 
   template {
     container {
-      name   = "api" # container app var.name
+      name   = "${var.prefix}-${var.environment}-${var.service}-capp"
       image  = var.image
       cpu    = 0.25
       memory = "0.5Gi"

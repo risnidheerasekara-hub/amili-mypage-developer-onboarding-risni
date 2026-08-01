@@ -36,7 +36,7 @@ module "static_web_app" {
   environment         = var.environment
   service             = var.service
   location            = var.swa_location
-  resource_group_name = module.resource_group.azure-rg-name
+  resource_group_name = module.resource_group.resource_group_name
   sku_tier            = var.swa_sku_tier
   tags                = local.tags
 }
@@ -47,17 +47,17 @@ module "container_registry" {
   environment         = var.environment
   service             = var.service
   location            = var.location
-  resource_group_name = module.resource_group.azure-rg-name
+  resource_group_name = module.resource_group.resource_group_name
   tags                = local.tags
 }
 
 module "container_app_environment" {
-  source              = "./container_app_environment"
+  source              = "./container-app-environment"
   prefix              = var.prefix
   environment         = var.environment
   service             = var.service
   location            = var.location
-  resource_group_name = module.resource_group.azure-rg-name
+  resource_group_name = module.resource_group.resource_group_name
   tags                = local.tags
 }
 
@@ -67,7 +67,7 @@ module "postgres_server" {
   environment            = var.environment
   service                = var.service
   location               = var.location
-  resource_group_name    = module.resource_group.azure-rg-name
+  resource_group_name    = module.resource_group.resource_group_name
   administrator_login    = var.postgres_admin_login
   administrator_password = random_password.postgres_admin_password.result
   postgresql_version     = var.postgresql_version
@@ -76,11 +76,13 @@ module "postgres_server" {
   tags                   = local.tags
 }
 
-module "container-app" {
+module "container_app" {
   source               = "./container-app"
-  name                 = "${var.prefix}-${var.environment}-${var.service}-api"
+  prefix               = var.prefix
+  environment          = var.environment
+  service              = var.service
   location             = var.location
-  resource_group_name  = module.resource_group.azure-rg-name
+  resource_group_name  = module.resource_group.resource_group_name
   container_app_env_id = module.container_app_environment.env_id
   image                = "amilidevmypageregistry.azurecr.io/amili-mypage-api:v1"
   registry_server      = module.container_registry.login_server
@@ -100,16 +102,16 @@ module "app_service_plan" {
   environment         = var.environment
   service             = var.service
   location            = var.app_service_location
-  resource_group_name = module.resource_group.azure-rg-name
+  resource_group_name = module.resource_group.resource_group_name
   tags                = local.tags
 }
 
-module "backend_app" {
+module "app_service" {
   source              = "./app-service"
   prefix              = var.prefix
   environment         = var.environment
   service             = var.service
-  resource_group_name = module.resource_group.azure-rg-name
+  resource_group_name = module.resource_group.resource_group_name
   location            = var.app_service_location
   service_plan_id     = module.app_service_plan.plan_id
   tags                = local.tags

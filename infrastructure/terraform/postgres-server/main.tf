@@ -1,5 +1,5 @@
 
-resource "azurerm_postgresql_flexible_server" "postgresql_server" {
+resource "azurerm_postgresql_flexible_server" "postgresql_flexible_server" {
   name                          = "${var.prefix}-${var.environment}-${var.service}-postgresql"
   resource_group_name           = var.resource_group_name
   location                      = var.location
@@ -13,9 +13,9 @@ resource "azurerm_postgresql_flexible_server" "postgresql_server" {
   sku_name                      = var.postgresql_sku
 }
 
-resource "azurerm_postgresql_flexible_server_database" "app_db" {
-  name      = "${var.prefix}_${var.environment}_db"
-  server_id = azurerm_postgresql_flexible_server.postgresql_server.id
+resource "azurerm_postgresql_flexible_server_database" "postgresql_flexible_server_database" {
+  name      = "${var.prefix}-${var.environment}-${var.service}-pgdb"
+  server_id = azurerm_postgresql_flexible_server.postgresql_flexible_server.id
   collation = "en_US.utf8"
   charset   = "utf8"
 }

@@ -1,13 +1,21 @@
+variable "prefix" {
+  description = "prefix name"
+}
+
+variable "environment" {
+  description = "environment name"
+}
+
+variable "service" {
+  description = "service name"
+}
+
 variable "container_app_env_id" {
   description = "Container App Environment ID"
 }
 
 variable "location" {
   description = "location name"
-}
-
-variable "name" {
-  description = "container app name"
 }
 
 variable "resource_group_name" {
