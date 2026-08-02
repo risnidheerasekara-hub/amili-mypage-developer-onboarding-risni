@@ -8,6 +8,11 @@ output "backend_url" {
   value       = "https://${module.app_service.default_hostname}"
 }
 
+output "container_app_backend_url" {
+  description = "Public URL of the Container App (your API)"
+  value       = "https://${module.container_app.host_url}"
+}
+
 output "static_web_app_deployment_token" {
   description = "Token used by GitHub Actions to deploy to the Static Web App"
   value       = module.static_web_app.deployment_token

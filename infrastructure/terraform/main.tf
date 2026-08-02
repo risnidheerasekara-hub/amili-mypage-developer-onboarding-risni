@@ -2,7 +2,6 @@ locals {
   tags = {
     product          = var.prefix
     environment      = var.environment
-    service          = var.service
     location         = var.location
     created_by       = var.created_by
     provisioned_with = var.provisioned_with

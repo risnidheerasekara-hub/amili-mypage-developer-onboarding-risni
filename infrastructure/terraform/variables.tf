@@ -47,3 +47,9 @@ variable "created_by" {
   description = "created by whome"
   default = "ris"
 }
+
+variable "service" {
+  description = "Service name, e.g. 'mypage'"
+  type        = string
+  default = "mypage"
+}

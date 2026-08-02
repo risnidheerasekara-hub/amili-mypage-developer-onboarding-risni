@@ -39,12 +39,6 @@ variable "environment" {
   default     = "dev"
 }
 
-variable "service" {
-  description = "Service name, e.g. 'mypage'"
-  type        = string
-  default = "mypage"
-}
-
 variable "location" {
   description = "Azure region for resources"
   default     = "northeurope"
