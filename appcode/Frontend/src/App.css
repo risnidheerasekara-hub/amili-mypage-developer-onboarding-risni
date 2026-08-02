@@ -35,8 +35,11 @@
 
 .app-content {
   flex: 1;
+  min-height: 0;
   padding: 2rem;
   max-width: 960px;
   width: 100%;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
 }

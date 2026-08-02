@@ -4,6 +4,7 @@ import { type Todo } from '../models/todo';
 import { todoService } from '../services/todoService';
 import { TodoDialog } from './TodoDialog';
 import { showToast } from '../../../shared/components/Toast';
+import { Pagination } from '../../../shared/components/Pagination';
 import './TodoList.css';
 import { EllipsisVertical, Circle, CircleCheckBig } from 'lucide-react';
 
@@ -20,6 +21,8 @@ export function TodoList() {
   const [updatingIds, setUpdatingIds] = useState<Set<number>>(new Set());
   const [menu, setMenu] = useState<MenuState | null>(null);
   const [dialogState, setDialogState] = useState<'new' | Todo | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10;
 
   useEffect(() => { loadTodos(); }, []);
 
@@ -53,7 +56,7 @@ export function TodoList() {
   }
 
   function editTodo(todo: Todo) {
-          if (todo.isCompleted) return;
+    if (todo.isCompleted) return;
     setMenu(null);
     setDialogState(todo);
   }
@@ -74,6 +77,13 @@ export function TodoList() {
   const filteredTodos = todos.filter(t =>
     t.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  const totalPages = Math.ceil(filteredTodos.length / pageSize);
+  const pagedTodos = filteredTodos.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
+  function handleSearch(value: string) {
+    setSearchTerm(value);
+    setCurrentPage(1);
+  }
 
   return (
     <div className="todo-list">
@@ -81,7 +91,7 @@ export function TodoList() {
       <div className="toolbar">
         <input
           value={searchTerm}
-          onChange={e => setSearchTerm(e.target.value)}
+          onChange={e => handleSearch(e.target.value)}
           placeholder="Search"
         />
         <button className="btn-add" onClick={() => setDialogState('new')} aria-label="Add todo">
@@ -90,13 +100,7 @@ export function TodoList() {
       </div>
 
       <div className="todo-list__card">
-        {isLoading ? (
-          <div className="loading-state">Loading todos…</div>
-        ) : filteredTodos.length === 0 ? (
-          <div className="empty-state">
-            {searchTerm ? 'No todos match your search.' : 'No todos yet — add your first one.'}
-          </div>
-        ) : (
+        <div className="todo-table-wrapper">
           <table className="todo-table">
             <thead>
               <tr>
@@ -109,8 +113,14 @@ export function TodoList() {
               </tr>
             </thead>
             <tbody>
-              {filteredTodos.map(todo => (
-                <tr key={todo.id} >
+              {isLoading ? (
+                <tr><td colSpan={6} className="loading-state">Loading todos…</td></tr>
+              ) : filteredTodos.length === 0 ? (
+                <tr><td colSpan={6} className="empty-state">
+                  {searchTerm ? 'No todos match your search.' : 'No todos yet — add your first one.'}
+                </td></tr>
+              ) : pagedTodos.map(todo => (
+                <tr key={todo.id}>
                   <td className="actions-cell">
                     <button
                       type="button"
@@ -142,7 +152,14 @@ export function TodoList() {
               ))}
             </tbody>
           </table>
-        )}
+        </div>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+          pageSize={pageSize}
+          totalItems={filteredTodos.length}
+        />
       </div>
 
       {menu && createPortal(
