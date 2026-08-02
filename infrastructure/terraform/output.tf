@@ -10,7 +10,7 @@ output "backend_url" {
 
 output "container_app_backend_url" {
   description = "Public URL of the Container App (your API)"
-  value       = "https://${module.container_app.host_url}"
+  value       = module.container_app.host_url
 }
 
 output "static_web_app_deployment_token" {
